@@ -3,7 +3,7 @@ requires = ["hatchling>=1.5.0", "hatch-nodejs-version>=0.3.2", "hatch-jupyter-bu
 build-backend = "hatchling.build"
 
 [project]
-name = "pynote"
+name = "jupyter-pynote"
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -88,12 +88,11 @@ skip-if-exists = ["pynote/labextension/static/style.js"]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
 build_cmd = "build:prod"
-# Absolute path so the builder works even when pip strips PATH in its
-# isolated subprocess.
-npm = ["/Users/william/projects/venv/bin/jlpm"]
+# Use whichever jlpm is on PATH — portable across contributors / CI.
+npm = ["jlpm"]
 
 [tool.hatch.build.hooks.jupyter-builder.editable-build-kwargs]
 build_cmd = "install:extension"
-npm = ["/Users/william/projects/venv/bin/jlpm"]
+npm = ["jlpm"]
 source_dir = "src"
 build_dir = "pynote/labextension"

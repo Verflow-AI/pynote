@@ -1,5 +1,7 @@
 # pynote
 
+> PyPI distribution: **`jupyter-pynote`** · Python import: `pynote` · Lab extension id: `pynote`
+
 Claude-powered chat side panel for **JupyterLab 4** and **Jupyter Notebook 7**.
 
 Open any notebook, crack open the side panel, and talk to Claude about the code. When Claude proposes changes to the notebook, type **`apply`** in chat and they're written into real cells — no dialog box, no reload, no token-pasting.
@@ -102,7 +104,7 @@ On Python-side changes, restart Lab.
 ```bash
 jupyter server extension disable pynote
 jupyter labextension uninstall pynote
-pip uninstall pynote
+pip uninstall jupyter-pynote
 ```
 
 ## Troubleshooting
