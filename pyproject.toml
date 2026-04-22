@@ -1,0 +1,99 @@
+[build-system]
+requires = ["hatchling>=1.5.0", "hatch-nodejs-version>=0.3.2", "hatch-jupyter-builder>=0.8.1"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pynote"
+dynamic = ["version", "description", "authors", "urls", "keywords"]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+classifiers = [
+    "Framework :: Jupyter",
+    "Framework :: Jupyter :: JupyterLab",
+    "Framework :: Jupyter :: JupyterLab :: 4",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "jupyter_server>=2.0.0,<3",
+    "anthropic>=0.40.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "build",
+    "jupyterlab>=4.0.0,<5",
+    "pytest",
+    "pytest-tornasync",
+]
+
+[tool.hatch.version]
+source = "nodejs"
+
+[tool.hatch.metadata.hooks.nodejs]
+fields = ["description", "authors", "urls"]
+
+[tool.hatch.build.targets.sdist]
+artifacts = ["pynote/labextension"]
+# `exclude` is load-bearing for key safety: hatchling's sdist does NOT
+# consult .gitignore, so anything matching these patterns would ship in the
+# tarball unless listed here. Update deliberately.
+exclude = [
+    ".github",
+    "binder",
+    "node_modules",
+    "lib",
+    "dist",
+    ".env",
+    ".env.*",
+    "**/.env",
+    "**/.env.*",
+    "**/.envrc",
+    "**/*.pem",
+    "**/*.key",
+    "**/.yarn",
+    "**/.pytest_cache",
+]
+
+[tool.hatch.build.targets.wheel]
+# Only files inside the explicit packages end up in the wheel; nothing at
+# the repo root leaks in. Kept here explicitly so a future `include` bug
+# can't quietly pull .env in.
+packages = ["pynote"]
+exclude = [
+    "**/.env",
+    "**/.env.*",
+    "**/*.pem",
+    "**/*.key",
+]
+
+[tool.hatch.build.targets.wheel.shared-data]
+"pynote/labextension" = "share/jupyter/labextensions/pynote"
+"install.json" = "share/jupyter/labextensions/pynote/install.json"
+"jupyter-config/server-config" = "etc/jupyter/jupyter_server_config.d"
+
+[tool.hatch.build.hooks.version]
+path = "pynote/_version.py"
+
+[tool.hatch.build.hooks.jupyter-builder]
+dependencies = ["hatch-jupyter-builder>=0.5"]
+build-function = "hatch_jupyter_builder.npm_builder"
+ensured-targets = [
+    "pynote/labextension/static/style.js",
+    "pynote/labextension/package.json",
+]
+skip-if-exists = ["pynote/labextension/static/style.js"]
+
+[tool.hatch.build.hooks.jupyter-builder.build-kwargs]
+build_cmd = "build:prod"
+# Absolute path so the builder works even when pip strips PATH in its
+# isolated subprocess.
+npm = ["/Users/william/projects/venv/bin/jlpm"]
+
+[tool.hatch.build.hooks.jupyter-builder.editable-build-kwargs]
+build_cmd = "install:extension"
+npm = ["/Users/william/projects/venv/bin/jlpm"]
+source_dir = "src"
+build_dir = "pynote/labextension"

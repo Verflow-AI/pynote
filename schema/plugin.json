@@ -1,0 +1,8 @@
+{
+  "title": "pynote",
+  "description": "Settings for the pynote chat side panel.",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false,
+  "jupyter.lab.setting-icon-label": "pynote"
+}
