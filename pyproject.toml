@@ -70,8 +70,10 @@ exclude = [
 ]
 
 [tool.hatch.build.targets.wheel.shared-data]
+# The labextension directory mapping already carries install.json (jlpm build
+# copies it in). Do NOT add an explicit "install.json" entry here — that
+# produced a duplicate zip entry and PyPI's validator rejects the wheel.
 "pynote/labextension" = "share/jupyter/labextensions/pynote"
-"install.json" = "share/jupyter/labextensions/pynote/install.json"
 "jupyter-config/server-config" = "etc/jupyter/jupyter_server_config.d"
 
 [tool.hatch.build.hooks.version]

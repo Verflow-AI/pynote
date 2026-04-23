@@ -18,11 +18,36 @@ Open any notebook, crack open the side panel, and talk to Claude about the code.
 ## Prerequisites
 
 - Python 3.9+
-- JupyterLab 4 or Notebook 7 (`pip install jupyterlab`)
-- Node 18+ and `jlpm` (ships with JupyterLab)
+- JupyterLab 4 or Notebook 7
 - An Anthropic API key
 
-## Install alongside your existing Jupyter
+## Install from PyPI
+
+```bash
+pip install jupyter-pynote
+```
+
+That's it — the wheel ships the prebuilt labextension, so no Node, no `jupyter labextension install`, no post-install step. Both the server extension and the Lab plugin auto-enable.
+
+Provide your Anthropic key once (persistent across shells; auto-loaded by the server at startup):
+
+```bash
+mkdir -p ~/.pynote
+echo 'ANTHROPIC_API_KEY=sk-ant-...' > ~/.pynote/.env
+chmod 600 ~/.pynote/.env
+```
+
+Or export it in your shell (`~/.zshrc`, `direnv`, per-venv activate scripts — anything that gets into the environment of the `jupyter lab` process).
+
+Launch:
+
+```bash
+jupyter lab
+```
+
+Open any `.ipynb`. You'll see a **PyNote** tab in the right sidebar.
+
+## Install from source (dev)
 
 From `jupyter-pynote/`:
 
@@ -40,7 +65,7 @@ jupyter labextension develop . --overwrite
 # 4. Enable the Jupyter server extension
 jupyter server extension enable pynote
 
-# 5. Provide your API key (or put it in a .env you source before launching)
+# 5. Provide your API key (or put it in ~/.pynote/.env — auto-loaded)
 export ANTHROPIC_API_KEY=sk-ant-...
 
 # 6. Launch Jupyter
